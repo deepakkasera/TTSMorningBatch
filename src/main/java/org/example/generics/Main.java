@@ -47,6 +47,11 @@ public class Main {
         List<String> names = new ArrayList<>();
         List<Double> doubles = new ArrayList<>();
 
+        Pair.doSomething("Scaler", 1);
+        Pair.doSomething(10000, 2000L);
+        Pair.doSomething(1.2345, 2.4567);
+        Pair.doSomething(numbers, names);
+
         System.out.println("DEBUG");
 
     }

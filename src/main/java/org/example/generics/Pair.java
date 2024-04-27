@@ -19,4 +19,13 @@ public class Pair<A, B> {
     public B getSecond() {
         return second;
     }
+
+    //Generic Methods.
+    public static <A, B> void doSomething(A data1, B data2) {
+        System.out.println("do Something");
+    }
+
+    public void doSomethingElse(A data) {
+        System.out.println("Do something else");
+    }
 }
