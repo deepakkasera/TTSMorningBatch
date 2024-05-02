@@ -52,7 +52,7 @@ public class Main {
 
         while (!pq.isEmpty()) {
             System.out.println(pq.peek().toString());
-            pq.poll();
+            pq.poll(); // delete Min/Max
         }
     }
 }
