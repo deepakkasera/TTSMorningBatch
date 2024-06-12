@@ -38,7 +38,6 @@ public class Main {
         while (game.getGameState().equals(GameState.IN_PROGRESS)) {
             //1. Print the board.
             //2. Ask user to choose where they want to make the move.
-
             gameController.printBoard(game);
 
             gameController.makeMove(game);

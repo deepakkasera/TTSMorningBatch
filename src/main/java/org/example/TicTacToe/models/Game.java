@@ -1,10 +1,10 @@
 package org.example.TicTacToe.models;
 
 import org.example.TicTacToe.exceptions.InvalidBotCountException;
+import org.example.TicTacToe.exceptions.InvalidMoveException;
 import org.example.TicTacToe.exceptions.InvalidPlayerCountException;
 import org.example.TicTacToe.strategies.winningstrategies.WinningStrategy;
 
-import javax.swing.plaf.ListUI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +32,61 @@ public class Game {
 
     public void printBoard() {
         board.print();
+    }
+
+    private boolean validateMove(Move move) {
+        Player player = move.getPlayer();
+        Cell cell = move.getCell();
+        int row = cell.getRow();
+        int col = cell.getCol();
+
+        if (row < 0 || row >= board.getDimension() || col < 0
+                || col >= board.getDimension() || !cell.getCellState().equals(CellState.EMPTY)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public void makeMove() throws InvalidMoveException {
+        Player currentPlayer = players.get(nextPlayerMoveIndex);
+
+        System.out.println("It is " + currentPlayer.getName() + "'s move");
+
+        //Ask the user where they want to make a move.
+
+        Move move = currentPlayer.makeMove();
+
+        //Before executing the move, first validate if the cell is empty or not.
+        if (!validateMove(move)) {
+            throw new InvalidMoveException("Invalid move, please try again");
+        }
+
+        //Valid move, we can execute on the board.
+        int row = move.getCell().getRow();
+        int col = move.getCell().getCol();
+
+        Cell cell = board.getBoard().get(row).get(col);
+        cell.setCellState(CellState.FILLED);
+        cell.setPlayer(currentPlayer);
+
+        Move finalMove = new Move(currentPlayer, cell);
+        moves.add(finalMove);
+
+        nextPlayerMoveIndex = (nextPlayerMoveIndex + 1) % players.size();
+
+        if (checkWinner(currentPlayer, finalMove)) {
+            winner = currentPlayer;
+            gameState = GameState.ENDED;
+        } else if (moves.size() == board.getDimension() * board.getDimension()) {
+            //Game has DRAWN.
+            gameState = GameState.DRAW;
+        }
+    }
+
+    private boolean checkWinner(Player player, Move move) {
+        //Check the row, column and diagonal (if applicable)
+
     }
 
     public List<Player> getPlayers() {
