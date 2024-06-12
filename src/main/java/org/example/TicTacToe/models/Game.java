@@ -41,7 +41,8 @@ public class Game {
         int col = cell.getCol();
 
         if (row < 0 || row >= board.getDimension() || col < 0
-                || col >= board.getDimension() || !cell.getCellState().equals(CellState.EMPTY)) {
+                || col >= board.getDimension() ||
+                !board.getBoard().get(row).get(col).getCellState().equals(CellState.EMPTY)) {
             return false;
         }
 
@@ -55,7 +56,7 @@ public class Game {
 
         //Ask the user where they want to make a move.
 
-        Move move = currentPlayer.makeMove();
+        Move move = currentPlayer.makeMove(board);
 
         //Before executing the move, first validate if the cell is empty or not.
         if (!validateMove(move)) {
@@ -75,7 +76,7 @@ public class Game {
 
         nextPlayerMoveIndex = (nextPlayerMoveIndex + 1) % players.size();
 
-        if (checkWinner(currentPlayer, finalMove)) {
+        if (checkWinner(finalMove)) {
             winner = currentPlayer;
             gameState = GameState.ENDED;
         } else if (moves.size() == board.getDimension() * board.getDimension()) {
@@ -84,9 +85,15 @@ public class Game {
         }
     }
 
-    private boolean checkWinner(Player player, Move move) {
+    private boolean checkWinner(Move move) {
         //Check the row, column and diagonal (if applicable)
+        for (WinningStrategy winningStrategy : winningStrategies) {
+            if (winningStrategy.checkWinner(board, move)) {
+                return true;
+            }
+        }
 
+        return false;
     }
 
     public List<Player> getPlayers() {
